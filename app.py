@@ -28,9 +28,26 @@ def main():
 
 @app.route('/navigator', methods=[ 'GET','POST'])
 def navigator():
-    print request.args.get('search_term', '')
+    search_term= request.args.get('search_term', '')
+    url = "https://api.github.com/search/repositories?q="+search_term+"&order=desc"        
+    response = json.loads(urllib.urlopen(url).read())
+    items=response["items"]
+    print items[0].keys()
+    print "yes"
+    results=[None]*5
+    for i in xrange(min(5, len(items))):
+        
+        results[i]={
+        "search_term": search_term,
+        "respository_name": items[i]["name"],
+        "owner_login":items[i]["owner"]["login"],
+        "created_at":items[i]["created_at"],
+        "avatar_url": items[i]["owner"]["avatar_url"]
+        }
 
-    return render_template('index.html',result="result")
+
+    print results
+    return render_template('index.html',results=results)
 
 
 if __name__ == '__main__':

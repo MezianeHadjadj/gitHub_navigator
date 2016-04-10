@@ -1,4 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
- <p>{{ result }}</p>
+<h1>Search term: {{ results[0].search_term }}</h1>
+<hr/>
+{% for result in results %}
+<h2>Repository name: {{ result.respository_name }}</h2>
+<h3> Created at: {{ result.created_at }}</h3>
+<a href="{owner_url}"><img src="{{ result.avatar_url }}" alt="avatar" height="42" width="42"/></a>
+Owner: {{ result.owner_login }}
+<h3>LastCommit</h3>
+{sha} {commit_message}  {commit_author_name}
+<hr/>
+
+
+  {% endfor %}
+
 {% endblock %}
