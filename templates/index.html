@@ -5,12 +5,14 @@
 {% for result in results %}
 <h2>Repository name: {{ result.respository_name }}</h2>
 <h3> Created at: {{ result.created_at }}</h3>
-<a href="{owner_url}"><img src="{{ result.avatar_url }}" alt="avatar" height="42" width="42"/></a>
+<a target="_blank" href="{{ result.html_url  }}"><img src="{{ result.avatar_url }}" alt="avatar" height="42" width="42"/></a>
 Owner: {{ result.owner_login }}
-<h3>LastCommit</h3>
-{sha} {commit_message}  {commit_author_name}
-<hr/>
+<h3>LastCommit:</h3>
 
+<h4>Sha: </h4>{{ result.sha }} 
+<h4>Commit message: </h4> {{ result.commit_message }}  
+<h4>Commit author: </h4> {{ result.commit_author_name }}
+<hr/>
 
   {% endfor %}
 
