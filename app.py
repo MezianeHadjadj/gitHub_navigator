@@ -28,13 +28,24 @@ def get_last_commit(full_name):
 def navigator():
     search_term= request.args.get('search_term', '')
     #search repositories by name
-    url = "https://api.github.com/search/repositories?q="+search_term+"&order=desc&per_page=5"        
+    url = "https://api.github.com/search/repositories?q="+search_term+"&order=desc&per_page=5&sort=updated"        
     response = json.loads(urllib.urlopen(url).read())
     items=response["items"]
     results=[None]*5
     for i in xrange(len(items)):
+        print i
         #get last commit
         commits= get_last_commit(items[i]["full_name"])
+
+        if  type (commits) == dict:
+            sha="Repo is empty"
+            commit_message="null"
+            commit_author_name="null"
+        else:
+            sha=commits[0]["sha"]
+            commit_message=commits[0]["commit"]["message"]
+            commit_author_name=commits[0]["commit"]["author"]["name"]
+            
         #render results
         results[i]={
         "search_term": search_term,
@@ -42,11 +53,12 @@ def navigator():
         "owner_login":items[i]["owner"]["login"],
         "created_at":items[i]["created_at"],
         "avatar_url": items[i]["owner"]["avatar_url"],
-        "sha":commits[0]["sha"],
-        "commit_message": commits[0]["commit"]["message"],
-        "commit_author_name": commits[0]["commit"]["author"]["name"],
+        "sha":sha,
+        "commit_message": commit_message,
+        "commit_author_name": commit_author_name,
         "html_url": items[i]["html_url"]
         }
+        
 
     return render_template('index.html',results=results)
 
